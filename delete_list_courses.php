@@ -20,10 +20,16 @@ $timenow = time();
 mtrace("Cron started at: " . date('r', $timenow). "\n");
 
 // 2. Deleting Moodle courses and registered courses from 'mdl_list_courses_delete' table
+$counter = 0;
 foreach ($result as $obj) {
-	echo "Deleting course with ID: ". $obj->idcourse . "\n";
+	echo "\n" . 'Deleting course with ID: ' . $obj->idcourse . "\n";
+	echo 'Started at: ' . date('H:m:s') . "\n";
+	echo 'Memory usage: ' . display_size(memory_get_usage()) . "\n";
 	delete_course($obj->idcourse);
+	echo 'Deleted at: ' . date('H:m:s') . "\n";
+	echo 'Memory usage: ' . display_size(memory_get_usage());
 	$DB->delete_records('list_courses_delete', array('idcourse' => $obj->idcourse));
+	$counter += 1;
 	// If time now is >= 4am then stop the cron: leave a gap to fix_course_sortorder() call
 	if(intval(date('H')) >= 4) {
 		break;
@@ -37,3 +43,4 @@ fix_course_sortorder();
 mtrace("\n" . 'Cron completed at: ' . date('r', time()) . "\n" . 'Memory used: ' . display_size(memory_get_usage()));
 $difftime = microtime_diff($starttime, microtime());
 mtrace("Cron took " . $difftime . " seconds to finish.");
+echo "\nDeleted courses: " .$counter;
