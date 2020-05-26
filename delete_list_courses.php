@@ -4,7 +4,8 @@
  * Courses to be deleted are added from this URL: https://../moodle/course/delete_old_courses/
  * @author Hernán Darío Arango C. <hernan.arango@yahoo.com>
  * Modified by monitor: Juan Felipe Orozco Escobar <juan.orozco.escobar@correounivalle.edu.co>
- * Version 0.2
+ * Modified by monitor: Iader E. Garcia Gomez <iader.garcia@correounivalle.edu.co>
+ * Version 0.3
  **/
 
 define('CLI_SCRIPT', true);
@@ -33,8 +34,65 @@ foreach ($result as $obj) {
 	echo 'Memory usage: ' . display_size(memory_get_usage());
 	$DB->delete_records('list_courses_delete', array('idcourse' => $obj->idcourse));
 	$counter += 1;
-	// If time now is >= 4am then stop the cron: leave a gap to fix_course_sortorder() call
-	if(intval(date('H')) == intval(15)) {
+
+	// If time now is >= 2am then stop the cron: leave a gap to fix_course_sortorder() call
+	if(intval(date('H')) >= 2) {
+
+		global $DB;
+
+		$coursesToDelete = $DB->count_records('list_courses_delete');
+
+		#If the number of courses to be deleted is greater than zero, send an email notification
+		if(intval($coursesToDelete) > 0) {
+			$fromUser = core_user::get_user_by_username('administrador', 
+                                            'id, 
+                                            firstname, 
+                                            lastname, 
+                                            username, 
+                                            email, 
+                                            maildisplay, 
+                                            mailformat,
+                                            firstnamephonetic,
+                                            lastnamephonetic,
+                                            middlename,
+                                            alternatename');
+			$toUser1 = core_user::get_user_by_username('66996031', 
+														'id, 
+														firstname, 
+														lastname, 
+														username, 
+														email, 
+														maildisplay, 
+														mailformat,
+														firstnamephonetic,
+														lastnamephonetic,
+														middlename,
+														alternatename');
+			$toUser2 = core_user::get_user_by_username('1144132883', 
+														'id, 
+														firstname, 
+														lastname, 
+														username, 
+														email, 
+														maildisplay, 
+														mailformat,
+														firstnamephonetic,
+														lastnamephonetic,
+														middlename,
+														alternatename');
+
+			$subject = "Notificación sobre cursos pendientes por borrar en el Campus Virtual";
+
+			$textToSendHtml = "El módulo de eliminación de cursos ha detectado que el día de hoy quedan cursos pendientes por borrar.<br><br>";
+			$textToSendHtml .= "Cantidad de cursos pendientes: ".$coursesToDelete."<br><br>";
+			$textToSendHtml .= "Este mensaje ha sido generado automáticamente, por favor no responda a este mensaje.";
+
+			$textToSend = html_to_text($textToSendHtml);
+
+			$resultSendMessage1 = email_to_user($toUser1, $fromUser, $subject, $textToSend, $textToSendHtml, ", ", true);
+			$resultSendMessage2 = email_to_user($toUser2, $fromUser, $subject, $textToSend, $textToSendHtml, ", ", true);
+		}
+
 		break;
 	}
 }

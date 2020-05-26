@@ -123,7 +123,7 @@ $PAGE->requires->js_amd_inline(
 						for (var i = 0; i <= data.profesores.length - 1; i++) {
 							$('#info-teacher-course').append('<strong>'+data.profesores[i]+'</strong><br>');
 						}
-						$('#info-teacher-course').append('<br>¿Esta Seguro de añadir el curso a la lista de cursos a eliminar? Recuerde que los cursos serán eliminados a la 01:00 am de cada día.');
+						$('#info-teacher-course').append('<br>¿Esta Seguro de añadir el curso a la lista de cursos a eliminar? Recuerde que los cursos serán eliminados a partir de las 00:00 horas de cada día.');
 						$('#myModal').appendTo('body').modal('show');
 					}
 				}, 'json');
