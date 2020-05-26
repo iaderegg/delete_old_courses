@@ -36,7 +36,7 @@ foreach ($result as $obj) {
 	$counter += 1;
 
 	// If time now is >= 2am then stop the cron: leave a gap to fix_course_sortorder() call
-	if(intval(date('H')) > 2) {
+	if(intval(date('H')) >= 2) {
 
 		global $DB;
 
