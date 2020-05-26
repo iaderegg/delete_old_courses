@@ -8,7 +8,10 @@
  **/
 
 define('CLI_SCRIPT', true);
-require("../../config.php");
+
+ini_set('max_execution_time', 14400);
+
+require(__DIR__."../../../config.php");
 
 // 1. Getting all courses to delete from 'mdl_list_courses_delete' table
 $sql = "select idcourse from {list_courses_delete}";
@@ -23,15 +26,15 @@ mtrace("Cron started at: " . date('r', $timenow). "\n");
 $counter = 0;
 foreach ($result as $obj) {
 	echo "\n" . 'Deleting course with ID: ' . $obj->idcourse . "\n";
-	echo 'Started at: ' . date('H:m:s') . "\n";
+	echo 'Started at: ' . date('H:i:s') . "\n";
 	echo 'Memory usage: ' . display_size(memory_get_usage()) . "\n";
 	delete_course($obj->idcourse);
-	echo 'Deleted at: ' . date('H:m:s') . "\n";
+	echo 'Deleted at: ' . date('H:i:s') . "\n";
 	echo 'Memory usage: ' . display_size(memory_get_usage());
 	$DB->delete_records('list_courses_delete', array('idcourse' => $obj->idcourse));
 	$counter += 1;
 	// If time now is >= 4am then stop the cron: leave a gap to fix_course_sortorder() call
-	if(intval(date('H')) >= 4) {
+	if(intval(date('H')) == intval(15)) {
 		break;
 	}
 }
