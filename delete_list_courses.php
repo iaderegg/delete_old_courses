@@ -30,6 +30,14 @@ mtrace("Cron started at: " . date('r', $timenow) . "\n");
 // 2. Deleting Moodle courses and registered courses from 'mdl_list_courses_delete' table
 $counter = 0;
 foreach ($result as $obj) {
+
+    // If time now is >= 2am then stop the cron: leave a gap to fix_course_sortorder() call
+    if (intval(date('H')) >= 1 && intval(date('H')) < 4) {
+        break;
+    } elseif (intval(date('H')) >= 7) {
+        break;
+    }
+
     echo "\n" . 'Deleting course with ID: ' . $obj->idcourse . "\n";
     echo 'Started at: ' . date('H:i:s') . "\n";
     echo 'Memory usage: ' . display_size(memory_get_usage()) . "\n";
@@ -39,12 +47,7 @@ foreach ($result as $obj) {
     $DB->delete_records('list_courses_delete', array('idcourse' => $obj->idcourse));
     $counter += 1;
 
-    // If time now is >= 2am then stop the cron: leave a gap to fix_course_sortorder() call
-    if (intval(date('H')) >= 1 && intval(date('H')) < 4) {
-        break;
-    } elseif (intval(date('H')) >= 7) {
-        break;
-    }
+    
 }
 
 // 3. Fixing course category and course sortorder, also verifying category and course parents and paths
