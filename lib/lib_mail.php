@@ -6,7 +6,7 @@
  * Version: 0.1
  **/
 
-function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDelete) {
+function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDelete, $coursesDeleted) {
 
     $fromUser = core_user::get_user_by_username(
                                         $usernameFrom,
@@ -42,7 +42,8 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
     $subject = "Notificación sobre cursos pendientes por borrar en el Campus Virtual";
 
     $textToSendHtml = "El módulo de eliminación de cursos ha detectado que el día de hoy quedan cursos pendientes por borrar.<br><br>";
-    $textToSendHtml .= "Cantidad de cursos pendientes: " . $coursesToDelete . "<br><br>";
+    $textToSendHtml .= "Cantidad de cursos pendientes: " . $coursesToDelete . "<br>";
+    $textToSendHtml .= "Cantidad de cursos borrados: ". $coursesDeleted ."<br><br>";
     $textToSendHtml .= "Este mensaje ha sido generado automáticamente, por favor no responda a este mensaje.";
 
     $textToSend = html_to_text($textToSendHtml);
@@ -52,9 +53,9 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
     $completeFilePath = "/home/admincampus/";
 
     if (intval(date('H')) >= 1 && intval(date('H')) < 4) {
-        $nameFile = 'log_delete_courses_00';
+        $nameFile = 'log_delete_courses_0000.log';
     } elseif (intval(date('H')) >= 7) {
-        $nameFile = 'log_delete_courses_04';
+        $nameFile = 'log_delete_courses_0400.log';
     }
 
     $resultSendMessage = email_to_user($toUser, $fromUser, $subject, $textToSend, $textToSendHtml, $completeFilePath, $nameFile, true);

@@ -52,8 +52,8 @@ fix_course_sortorder();
 
 $coursesToDelete = $DB->count_records('list_courses_delete');
 
-delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete );
-delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete );
+delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $counter );
+delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $counter );
 
 //// Deleting process completed
 mtrace("\n" . 'Cron completed at: ' . date('r', time()) . "\n" . 'Memory used: ' . display_size(memory_get_usage()));
