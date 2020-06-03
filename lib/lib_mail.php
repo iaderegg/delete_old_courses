@@ -56,8 +56,10 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
         $nameFile = 'log_delete_courses_0000.log';
         echo $nameFile;
     } elseif (intval(date('H')) >= 7) {
-        echo $nameFile;
         $nameFile = 'log_delete_courses_0400.log';
+        echo $nameFile;
+    } else {
+        $nameFile = 'log_delete_courses_test.log';
     }
 
     $completeFilePath .= $nameFile;
