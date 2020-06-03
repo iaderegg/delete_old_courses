@@ -54,7 +54,9 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
     
     if (intval(date('H')) >= 1 && intval(date('H')) < 4) {
         $nameFile = 'log_delete_courses_0000.log';
+        echo $nameFile;
     } elseif (intval(date('H')) >= 7) {
+        echo $nameFile;
         $nameFile = 'log_delete_courses_0400.log';
     }
 
