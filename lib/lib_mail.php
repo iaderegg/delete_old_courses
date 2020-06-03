@@ -51,12 +51,14 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
     echo $textToSend;
 
     $completeFilePath = "/home/admincampus/";
-
+    
     if (intval(date('H')) >= 1 && intval(date('H')) < 4) {
         $nameFile = 'log_delete_courses_0000.log';
     } elseif (intval(date('H')) >= 7) {
         $nameFile = 'log_delete_courses_0400.log';
     }
+
+    $completeFilePath .= $nameFile;
 
     $resultSendMessage = email_to_user($toUser, $fromUser, $subject, $textToSend, $textToSendHtml, $completeFilePath, $nameFile, true);
 }
