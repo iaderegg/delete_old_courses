@@ -8,6 +8,8 @@
 
 function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDelete, $coursesDeleted) {
 
+    global $CFG;
+
     $fromUser = core_user::get_user_by_username(
                                         $usernameFrom,
                                         'id, 
@@ -50,15 +52,13 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
 
     echo $textToSend;
 
-    $completeFilePath = "/home/admincampus/";
+    $completeFilePath = 'local/log/';
     
     if (intval(date('H')) >= 1 && intval(date('H')) < 4) {
         $nameFile = 'log_delete_courses_0000.log';
     } elseif (intval(date('H')) >= 7) {
         $nameFile = 'log_delete_courses_0400.log';
-    } else {
-        $nameFile = 'log_delete_courses_test.log';
-    }
+    } 
 
     $completeFilePath .= $nameFile;
     echo $completeFilePath;
